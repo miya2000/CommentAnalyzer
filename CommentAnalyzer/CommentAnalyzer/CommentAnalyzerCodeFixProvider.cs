@@ -30,10 +30,10 @@ namespace CommentAnalyzer
             var comment = root.FindTrivia(context.Span.Start);
 
             context.RegisterCodeFix(
-                CodeAction.Create("Remove comment", c => RemoveComment(context.Document, root, comment, c)),
+                CodeAction.Create("Remove comment", c => RemoveComment(context.Document, root, comment, c), "Remove comment"),
                 diagnostic);
             context.RegisterCodeFix(
-                CodeAction.Create("Remove comments", c => RemoveComments(context.Document, root, comment, c)),
+                CodeAction.Create("Remove comments", c => RemoveComments(context.Document, root, comment, c), "Remove comments"),
                 diagnostic);
         }
 
