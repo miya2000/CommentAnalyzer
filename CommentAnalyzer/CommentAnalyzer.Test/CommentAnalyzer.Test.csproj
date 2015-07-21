@@ -94,12 +94,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Verifiers\CodeFixVerifier.cs" />
-    <Compile Include="Verifiers\DiagnosticVerifier.cs" />
-    <Compile Include="Helpers\CodeFixVerifier.Helper.cs" />
-    <Compile Include="Helpers\DiagnosticResult.cs" />
-    <Compile Include="Helpers\DiagnosticVerifier.Helper.cs" />
-    <Compile Include="UnitTests.cs" />
+    <Compile Include="ChainingAssertion.MSTest.cs" />
+    <Compile Include="TestHelper\CodeAnalysisVerifier.cs" />
+    <Compile Include="TestHelper\DiagnosticResult.cs" />
+    <Compile Include="TestHelper\CodeAnalysisHelper.cs" />
+    <Compile Include="CommentAnalyzerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

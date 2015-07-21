@@ -19,6 +19,9 @@ namespace CommentAnalyzer
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CommentAnalyzerCodeFixProvider)), Shared]
     public class CommentAnalyzerCodeFixProvider : CodeFixProvider
     {
+        public const string ActionKeyRemoveComment = CommentAnalyzer.DiagnosticId + ".RemoveComment";
+        public const string ActionKeyRemoveComments = CommentAnalyzer.DiagnosticId + ".RemoveComments";
+
         public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CommentAnalyzer.DiagnosticId);
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -30,10 +33,10 @@ namespace CommentAnalyzer
             var comment = root.FindTrivia(context.Span.Start);
 
             context.RegisterCodeFix(
-                CodeAction.Create("Remove comment", c => RemoveComment(context.Document, root, comment, c)),
+                CodeAction.Create("Remove Comment", c => RemoveComment(context.Document, root, comment, c), ActionKeyRemoveComment),
                 diagnostic);
             context.RegisterCodeFix(
-                CodeAction.Create("Remove comments", c => RemoveComments(context.Document, root, comment, c)),
+                CodeAction.Create("Remove Comments", c => RemoveComments(context.Document, root, comment, c), ActionKeyRemoveComments),
                 diagnostic);
         }
 

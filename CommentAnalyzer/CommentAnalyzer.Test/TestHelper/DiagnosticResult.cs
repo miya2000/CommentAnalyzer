@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
+using System.Linq;
 
 namespace TestHelper
 {
@@ -28,6 +29,11 @@ namespace TestHelper
         public string Path { get; }
         public int Line { get; }
         public int Column { get; }
+
+        public override string ToString()
+        {
+            return "new DiagnosticResultLocation(@\"" + Path.Replace("\"", "\"\"") + "\", " + Line + ", " + Column + ")";
+        }
     }
 
     /// <summary>
@@ -82,6 +88,20 @@ namespace TestHelper
             {
                 return this.Locations.Length > 0 ? this.Locations[0].Column : -1;
             }
+        }
+
+        public override string ToString()
+        {
+            return @"new DiagnosticResult
+{
+    Id = """ + Id + @""",
+    Message = @""" + Message.Replace("\"", "\"\"") + @""",
+    Severity = DiagnosticSeverity." + Severity.ToString() + @",
+" + (Locations.Length == 0 ? "" : (
+@"    Locations = new[] {
+" + string.Join(",\r\n", Locations.Select(l => "        " + l.ToString())) + @"
+    }
+")) + "};";
         }
     }
 }
