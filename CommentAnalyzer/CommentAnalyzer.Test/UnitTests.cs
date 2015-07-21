@@ -41,7 +41,7 @@ namespace CommentAnalyzer.Test
     }";
             var expected = new DiagnosticResult
             {
-                Id = CommentAnalyzer.DiagnosticId,
+                Id = "CommentAnalyzer",
                 Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
