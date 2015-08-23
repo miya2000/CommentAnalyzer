@@ -87,5 +87,23 @@ namespace CommentAnalyzer {
                 return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Comments.
+        /// </summary>
+        internal static string RemoveCommentsTitle {
+            get {
+                return ResourceManager.GetString("RemoveCommentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Comment.
+        /// </summary>
+        internal static string RemoveCommentTitle {
+            get {
+                return ResourceManager.GetString("RemoveCommentTitle", resourceCulture);
+            }
+        }
     }
 }

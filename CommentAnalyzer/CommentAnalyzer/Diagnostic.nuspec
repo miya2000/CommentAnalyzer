@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/miya2000/CommentAnalyzer</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Analyze comments and code fix.</description>
-    <releaseNotes>First Release.</releaseNotes>
+    <releaseNotes>First Major Release.</releaseNotes>
     <copyright>Copyright</copyright>
     <tags>CommentAnalyzer, analyzers, comment</tags>
   </metadata>
@@ -18,5 +18,6 @@
   <files>
     <file src="*.dll" target="analyzers\dotnet\cs" exclude="**\Microsoft.CodeAnalysis.*;**\System.Collections.Immutable.*;**\System.Reflection.Metadata.*;**\System.Composition.*" />
     <file src="tools\*.ps1" target="tools\" />
+    <file src="ja-JP\*.dll" target="analyzers\dotnet\cs\ja-JP" />
   </files>
 </package>
