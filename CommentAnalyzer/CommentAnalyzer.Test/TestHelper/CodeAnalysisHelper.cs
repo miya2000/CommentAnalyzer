@@ -478,6 +478,15 @@ namespace TestHelper
             var actual = CodeAnalysisHelper.GetStringFromDocument(document);
             return actual;
         }
+        internal static List<CodeAction> GetFixActions(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string source)
+        {
+            var document = CodeAnalysisHelper.CreateDocument(source, language);
+            var analyzerDiagnostics = CodeAnalysisHelper.GetSortedDiagnosticsFromDocuments(analyzer, new[] { document });
+            var actions = new List<CodeAction>();
+            var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, d) => actions.Add(a), CancellationToken.None);
+            codeFixProvider.RegisterCodeFixesAsync(context).Wait();
+            return actions;
+        }
         #endregion
     }
 }

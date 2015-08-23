@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper;
@@ -15,6 +18,14 @@ namespace CommentAnalyzer.Test
         public void Initialize()
         {
             Verifier = NewVerifier();
+            //set default culture.
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+        }
+        [TestCleanup]
+        public void Cleanup()
+        {
+            //reset default culture.
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
         }
 
         #region SimpleStart_01_RemoveComment
@@ -397,5 +408,75 @@ namespace CommentAnalyzer.Test
         }
         #endregion
 
+        #region Localization_01_default
+        /// <summary>
+        /// Localization - default
+        /// </summary>
+        [TestMethod]
+        public void Localization_01_default()
+        {
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Hoge()
+            {
+               //2015-01-01 EDIT START
+               //var a = 100;
+               var a = 120;
+            }
+        }
+    }";
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            actualDiagnostics[0].Id.Is("CommentAnalyzer");
+            actualDiagnostics[0].Descriptor.Title.ToString().Is("Comment Analyzer");
+            actualDiagnostics[0].Descriptor.Description.ToString().Is("Remove senseless comments.");
+            actualDiagnostics[0].GetMessage().Is("Detect 'START' comment.");
+
+            var actualActions = Verifier.GetFixActions(test);
+            actualActions.Single(n => n.EquivalenceKey == CommentAnalyzerCodeFixProvider.ActionKeyRemoveComment).Title.Is("Remove Comment");
+            actualActions.Single(n => n.EquivalenceKey == CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments).Title.Is("Remove Comments");
+        }
+        #endregion
+        #region Localization_02_jaJP
+        /// <summary>
+        /// Localization - ja-JP
+        /// </summary>
+        [TestMethod]
+        public void Localization_02_jaJP()
+        {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("ja-JP");
+
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Hoge()
+            {
+               //2015-01-01 EDIT START
+               //var a = 100;
+               var a = 120;
+            }
+        }
+    }";
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            actualDiagnostics[0].Id.Is("CommentAnalyzer");
+            actualDiagnostics[0].Descriptor.Title.ToString().Is("コメントアナライザー");
+            actualDiagnostics[0].Descriptor.Description.ToString().Is("意味のないコメントを削除します。");
+            actualDiagnostics[0].GetMessage().Is("'START' コメントを検出しました.");
+
+            var actualActions = Verifier.GetFixActions(test);
+            actualActions.Single(n => n.EquivalenceKey == CommentAnalyzerCodeFixProvider.ActionKeyRemoveComment).Title.Is("コメントを削除（1行）");
+            actualActions.Single(n => n.EquivalenceKey == CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments).Title.Is("コメントを削除（まとめて）");
+        }
+        #endregion
     }
 }

@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AnalyzerDescription" xml:space="preserve">
-    <value>Remove senseless comments.</value>
+    <value>意味のないコメントを削除します。</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="AnalyzerMessageFormat" xml:space="preserve">
-    <value>Detect '{0}' comment.</value>
+    <value>'{0}' コメントを検出しました.</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="AnalyzerTitle" xml:space="preserve">
-    <value>Comment Analyzer</value>
+    <value>コメントアナライザー</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="RemoveCommentsTitle" xml:space="preserve">
-    <value>Remove Comments</value>
+    <value>コメントを削除（まとめて）</value>
   </data>
   <data name="RemoveCommentTitle" xml:space="preserve">
-    <value>Remove Comment</value>
+    <value>コメントを削除（1行）</value>
   </data>
 </root>

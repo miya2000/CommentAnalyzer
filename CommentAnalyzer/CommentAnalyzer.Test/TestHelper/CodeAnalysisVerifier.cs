@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -34,6 +35,11 @@ namespace TestHelper
         public string GetFixResult(string oldSource, string equivalenceKey = null, bool allowNewCompilerDiagnostics = false)
         {
             return CodeAnalysisHelper.GetFixResult(this.Language, this.Analyzer, this.CodeFix, oldSource, equivalenceKey, allowNewCompilerDiagnostics);
+        }
+
+        public List<CodeAction> GetFixActions(string source)
+        {
+            return CodeAnalysisHelper.GetFixActions(this.Language, this.Analyzer, this.CodeFix, source);
         }
     }
 }
