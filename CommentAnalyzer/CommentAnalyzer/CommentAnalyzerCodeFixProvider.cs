@@ -59,12 +59,16 @@ namespace CommentAnalyzer
 
             var lines = new List<SyntaxTrivia>();
 
-            var block = comment.Token.Parent.FirstAncestorOrSelf<BlockSyntax>();
-
-            var tokens = block.ChildNodesAndTokens();
+            var node = comment.Token.Parent.AncestorsAndSelf()
+                .Where(n => n is BlockSyntax || n is BaseTypeDeclarationSyntax)
+                .First();
+            var tokens = node.ChildNodesAndTokens();
 
             foreach (var line in tokens.Where(t => t.HasLeadingTrivia).SelectMany(t => t.GetLeadingTrivia().SplitLines()).SkipWhile(n => !n.Contains(comment)))
             {
+                //skip outside of declaration.
+                if (line[0].SpanStart < node.SpanStart || line[0].SpanStart > node.Span.End) continue;
+
                 // find line contains SingleLineComment only.
                 foreach (var firstTrivia in line.SkipWhile(n => n.Kind() == SyntaxKind.WhitespaceTrivia).Take(1))
                 {

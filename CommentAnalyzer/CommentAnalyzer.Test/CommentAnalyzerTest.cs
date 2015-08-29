@@ -408,6 +408,280 @@ namespace CommentAnalyzer.Test
         }
         #endregion
 
+        #region TypeDeclaration_01_Class
+        /// <summary>
+        /// TypeDeclaration - Class
+        /// </summary>
+        [TestMethod]
+        public void TypeDeclaration_01_Class()
+        {
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            //2015-01-01 EDIT START
+            //void Hoge()
+            //{
+            //   var a = 100;
+            //}
+            void Fuga()
+            {
+                //var a = 100;
+                var a = 120;
+            }
+            //2015-01-01 EDIT END
+        }
+    }";
+
+            var expectedDiagnostics = new DiagnosticResult
+            {
+                Id = "CommentAnalyzer",
+                Message = "Detect 'START' comment.",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] {
+                    new DiagnosticResultLocation("Test0.cs", 8, 13)
+                }
+            };
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            Verifier.VerifyDiagnosticResults(actualDiagnostics, expectedDiagnostics);
+
+            var expected = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            void Fuga()
+            {
+                //var a = 100;
+                var a = 120;
+            }
+        }
+    }";
+
+            var actual = Verifier.GetFixResult(test, CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments);
+            actual.Is(expected);
+        }
+        #endregion
+        #region TypeDeclaration_02_Struct
+        /// <summary>
+        /// TypeDeclaration - Struct
+        /// </summary>
+        [TestMethod]
+        public void TypeDeclaration_02_Struct()
+        {
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        struct TypeName
+        {
+            //2015-01-01 EDIT START
+            //string Hoge() { get; set; }
+            string Fuga() { get; set; }
+            //2015-01-01 EDIT END
+        }
+    }";
+
+            var expectedDiagnostics = new DiagnosticResult
+            {
+                Id = "CommentAnalyzer",
+                Message = "Detect 'START' comment.",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] {
+                    new DiagnosticResultLocation("Test0.cs", 8, 13)
+                }
+            };
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            Verifier.VerifyDiagnosticResults(actualDiagnostics, expectedDiagnostics);
+
+            var expected = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        struct TypeName
+        {
+            string Fuga() { get; set; }
+        }
+    }";
+
+            var actual = Verifier.GetFixResult(test, CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments);
+            actual.Is(expected);
+        }
+        #endregion
+        #region TypeDeclaration_03_Interface
+        /// <summary>
+        /// TypeDeclaration - Interface
+        /// </summary>
+        [TestMethod]
+        public void TypeDeclaration_03_Interface()
+        {
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        interface TypeName
+        {
+            //2015-01-01 EDIT START
+            //void Hoge();
+            void Fuga();
+            //2015-01-01 EDIT END
+        }
+    }";
+
+            var expectedDiagnostics = new DiagnosticResult
+            {
+                Id = "CommentAnalyzer",
+                Message = "Detect 'START' comment.",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] {
+                    new DiagnosticResultLocation("Test0.cs", 8, 13)
+                }
+            };
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            Verifier.VerifyDiagnosticResults(actualDiagnostics, expectedDiagnostics);
+
+            var expected = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        interface TypeName
+        {
+            void Fuga();
+        }
+    }";
+
+            var actual = Verifier.GetFixResult(test, CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments);
+            actual.Is(expected);
+        }
+        #endregion
+        #region TypeDeclaration_04_Enum
+        /// <summary>
+        /// TypeDeclaration - Enum
+        /// </summary>
+        [TestMethod]
+        public void TypeDeclaration_04_Enum()
+        {
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        enum TypeName
+        {
+            //2015-01-01 EDIT START
+            //Hoge;
+            Fuga;
+            //2015-01-01 EDIT END
+        }
+    }";
+
+            var expectedDiagnostics = new DiagnosticResult
+            {
+                Id = "CommentAnalyzer",
+                Message = "Detect 'START' comment.",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] {
+                    new DiagnosticResultLocation("Test0.cs", 8, 13)
+                }
+            };
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            Verifier.VerifyDiagnosticResults(actualDiagnostics, expectedDiagnostics);
+
+            var expected = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        enum TypeName
+        {
+            Fuga;
+        }
+    }";
+
+            var actual = Verifier.GetFixResult(test, CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments);
+            actual.Is(expected);
+        }
+        #endregion
+        #region TypeDeclaration_05_NestedClass
+        /// <summary>
+        /// TypeDeclaration - Nested Class
+        /// </summary>
+        [TestMethod]
+        public void TypeDeclaration_05_NestedClass()
+        {
+            var test = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            class NestedTypeName
+            {
+                //2015-01-01 EDIT START
+                //void Hoge()
+                //{
+                //   var a = 100;
+                //}
+                void Fuga()
+                {
+                    //var a = 100;
+                    var a = 120;
+                }
+                //2015-01-01 EDIT END
+            }
+        }
+    }";
+
+            var expectedDiagnostics = new DiagnosticResult
+            {
+                Id = "CommentAnalyzer",
+                Message = "Detect 'START' comment.",
+                Severity = DiagnosticSeverity.Error,
+                Locations = new[] {
+                    new DiagnosticResultLocation("Test0.cs", 10, 17)
+                }
+            };
+
+            var actualDiagnostics = Verifier.GetSortedDiagnostics(test);
+            Verifier.VerifyDiagnosticResults(actualDiagnostics, expectedDiagnostics);
+
+            var expected = @"
+    using System;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            class NestedTypeName
+            {
+                void Fuga()
+                {
+                    //var a = 100;
+                    var a = 120;
+                }
+            }
+        }
+    }";
+
+            var actual = Verifier.GetFixResult(test, CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments);
+            actual.Is(expected);
+        }
+        #endregion
+
         #region Localization_01_default
         /// <summary>
         /// Localization - default
@@ -478,5 +752,6 @@ namespace CommentAnalyzer.Test
             actualActions.Single(n => n.EquivalenceKey == CommentAnalyzerCodeFixProvider.ActionKeyRemoveComments).Title.Is("コメントを削除（まとめて）");
         }
         #endregion
+
     }
 }

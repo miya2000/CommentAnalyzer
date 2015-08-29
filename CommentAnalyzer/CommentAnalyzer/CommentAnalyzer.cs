@@ -27,7 +27,7 @@ namespace CommentAnalyzer
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeBlock, SyntaxKind.Block);
+            context.RegisterSyntaxNodeAction(AnalyzeBlock, SyntaxKind.Block, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.InterfaceDeclaration, SyntaxKind.EnumDeclaration);
         }
 
         private void AnalyzeBlock(SyntaxNodeAnalysisContext context)
@@ -35,12 +35,14 @@ namespace CommentAnalyzer
             var startRegex = new Regex(@"\bstart\b", RegexOptions.IgnoreCase);
             var dateRegex = new Regex(@"\b(?:\d{2,4}/\d{1,2}/\d{2,4}|\d{2,4}-\d{1,2}-\d{2,4})\b");
 
-            var block = context.Node as BlockSyntax;
-
-            var tokens = block.ChildNodesAndTokens();
+            var node = context.Node;
+            var tokens = node.ChildNodesAndTokens();
 
             foreach (var line in tokens.Where(t => t.HasLeadingTrivia).SelectMany(t => t.GetLeadingTrivia().SplitLines()))
             {
+                //skip outside of declaration.
+                if (line[0].SpanStart < node.SpanStart || line[0].SpanStart > node.Span.End) continue;
+
                 // find line contains SingleLineComment only.
                 foreach (var firstTrivia in line.SkipWhile(n => n.Kind() == SyntaxKind.WhitespaceTrivia).Take(1))
                 {
