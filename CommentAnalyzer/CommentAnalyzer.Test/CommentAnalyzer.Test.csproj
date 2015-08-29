@@ -96,7 +96,7 @@
   <ItemGroup>
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="TestHelper\CodeAnalysisVerifier.cs" />
-    <Compile Include="TestHelper\DiagnosticResult.cs" />
+    <Compile Include="TestHelper\CodeRefactoringVerifier.cs" />
     <Compile Include="TestHelper\CodeAnalysisHelper.cs" />
     <Compile Include="CommentAnalyzerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
