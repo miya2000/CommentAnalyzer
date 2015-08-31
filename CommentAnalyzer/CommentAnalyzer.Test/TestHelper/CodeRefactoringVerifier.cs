@@ -27,15 +27,25 @@ namespace TestHelper
             return CodeAnalysisHelper.GetRefactoringResult(this.Language, this.CodeRefactoring, oldSource, new TextSpan(index, 0), equivalenceKey);
         }
 
+        public string GetRefactoringResult(string oldSource, int fromIndex, int toIndex, string equivalenceKey = null)
+        {
+            return CodeAnalysisHelper.GetRefactoringResult(this.Language, this.CodeRefactoring, oldSource, new TextSpan(fromIndex, toIndex - fromIndex), equivalenceKey);
+        }
+
         public void VerifyRefactoring(string oldSource, int index, string newSource, string equivalenceKey = null, bool allowNewCompilerDiagnostics = false)
         {
             var actual = GetRefactoringResult(oldSource, index, equivalenceKey);
             Assert.AreEqual(newSource, actual);
         }
 
-        public List<CodeAction> GetFixActions(string source, int index)
+        public List<CodeAction> GetRefactoringActions(string source, int index)
         {
             return CodeAnalysisHelper.GetRefactoringActions(this.Language, this.CodeRefactoring, source, new TextSpan(index, 0));
+        }
+
+        public List<CodeAction> GetRefactoringActions(string source, int fromIndex, int toIndex)
+        {
+            return CodeAnalysisHelper.GetRefactoringActions(this.Language, this.CodeRefactoring, source, new TextSpan(fromIndex, toIndex - fromIndex));
         }
     }
 }
